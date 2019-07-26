@@ -50,7 +50,9 @@ export class AppComponent {
 
     this.onGetLog();
 
-    // setInterval(this.onGetLog, 1000);
+    setInterval(() => {
+      this.onGetLog();
+    }, 1000);
   }
 
   onGetLog() {
