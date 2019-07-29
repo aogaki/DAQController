@@ -8,7 +8,6 @@ import { logResponse, daqResponse } from './daq.model';
 })
 export class HttpClientService {
   constructor(private http: HttpClient, private x2j: NgxXml2jsonService) {}
-  private ipAddress = '192.168.167.202';
 
   private GetJSON(response: string): any {
     // Any response from DAQ-MW has XML header and response
@@ -19,9 +18,8 @@ export class HttpClientService {
     return jsonDoc.response;
   }
 
-  public getLog(): Promise<logResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/Log';
+  public getLog(ipAddress: string): Promise<logResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Log';
 
     return this.http
       .get(uri, { responseType: 'text' })
@@ -33,9 +31,8 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postConfigure(): Promise<daqResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/Params';
+  public postConfigure(ipAddress: string): Promise<daqResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Params';
 
     const body =
       "cmd=<?xml version='1.0' encoding='UTF-8' ?><request><params>config.xml</params></request>";
@@ -50,9 +47,9 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postUnconfigure(): Promise<daqResponse> {
+  public postUnconfigure(ipAddress: string): Promise<daqResponse> {
     const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/ResetParams';
+      'http://' + ipAddress + '/daqmw/scripts/daq.py/ResetParams';
 
     const body = '';
 
@@ -66,9 +63,8 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postStart(runNo: number): Promise<daqResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/Begin';
+  public postStart(runNo: number, ipAddress: string): Promise<daqResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Begin';
 
     const body =
       "cmd=<?xml version='1.0' encoding='UTF-8' ?><request><runNo>" +
@@ -85,9 +81,8 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postStop(): Promise<daqResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/End';
+  public postStop(ipAddress: string): Promise<daqResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/End';
 
     const body = '';
 
@@ -101,9 +96,8 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postPause(): Promise<daqResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/Pause';
+  public postPause(ipAddress: string): Promise<daqResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Pause';
 
     const body = '';
 
@@ -117,9 +111,8 @@ export class HttpClientService {
       .catch(this.errorHandler);
   }
 
-  public postResume(): Promise<daqResponse> {
-    const uri: string =
-      'http://' + this.ipAddress + '/daqmw/scripts/daq.py/Restart';
+  public postResume(ipAddress: string): Promise<daqResponse> {
+    const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Restart';
 
     const body = '';
 

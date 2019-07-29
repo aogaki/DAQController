@@ -5,7 +5,9 @@ import {
   MatButtonModule,
   MatCheckboxModule,
   MatTableModule,
-  MatInputModule
+  MatInputModule,
+  MatIconModule,
+  MatCardModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -19,8 +21,10 @@ import { FormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     MatButtonModule,
     MatCheckboxModule,
+    MatCardModule,
     MatTableModule,
     MatInputModule,
+    MatIconModule,
     FormsModule,
     HttpClientModule
   ],

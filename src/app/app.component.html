@@ -1,18 +1,18 @@
 <div class="example-button-row">
   <button mat-raised-button color="primary" (click)="onPostStart()" [disabled]="!daqState.start">
-    Start
+    <mat-icon>play_arrow</mat-icon> Start
   </button>
   <button mat-raised-button color="primary" (click)="onPostStop()" [disabled]="!daqState.stop">
-    Stop
+    <mat-icon>stop</mat-icon> Stop
   </button>
   <button mat-raised-button color="primary" (click)="onPostPause()" [disabled]="!daqState.pause">
-    Pause
+    <mat-icon>pause</mat-icon> Pause
   </button>
   <button mat-raised-button color="accent" (click)="onPostUnconfig()" [disabled]="!daqState.unconfigure">
     Unconfig
   </button>
   <button mat-raised-button color="accent" (click)="onPostConfig()" [disabled]="!daqState.configure">
-    Config
+    <mat-icon>settings</mat-icon> Config
   </button>
 
   <mat-form-field class="run-number">
@@ -48,3 +48,17 @@
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
   <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
 </mat-table>
+
+<mat-card *ngIf="!connFlag">
+  <mat-card-header>
+    Can not access to DAQ Controller at <font color="red">{{ ipAddress }}</font>.
+  </mat-card-header>
+  <mat-card-actions>
+    <mat-form-field class="run-number">
+      <input matInput placeholder="IP address" (keyup.enter)="onGetLog()" [(ngModel)]="ipAddress">
+    </mat-form-field>
+    <button mat-stroked-button color="warn" (click)="onGetLog()">
+      <mat-icon>settings</mat-icon> Change IP
+    </button>
+  </mat-card-actions>
+</mat-card>
