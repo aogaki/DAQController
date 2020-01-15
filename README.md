@@ -1,6 +1,6 @@
 # DAQController
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.3.  This controller is for [DAQ-Middleware](https://daqmw.kek.jp/).  You can set the IP address of web operator server and start to controll.  This controller has no special features than original controller.  
 
 ## Development server
 
