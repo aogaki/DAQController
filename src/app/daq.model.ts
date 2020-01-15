@@ -1,4 +1,4 @@
-export interface daqResult {
+export class daqResult {
   status: string;
   code: string;
   className: string;
@@ -8,24 +8,24 @@ export interface daqResult {
   messageJpn: string;
 }
 
-export interface daqResponse {
+export class daqResponse {
   methodName: string;
   result: daqResult;
 }
 
-export interface daqLog {
+export class daqLog {
   compName: string;
   state: string;
   eventNum: string;
   compStatus: string;
 }
 
-export interface daqReturnValue {
+export class daqReturnValue {
   result: daqResult;
   logs: daqLog[];
 }
 
-export interface logResponse {
+export class logResponse {
   methodName: string;
   returnValue: daqReturnValue;
 }

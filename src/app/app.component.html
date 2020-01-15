@@ -16,11 +16,20 @@
   </button>
 
   <mat-form-field class="run-number">
-    <input type="number" matInput placeholder="Run number" [(ngModel)]="runNo">
+    <input type="number" matInput placeholder="Run number (next)" [(ngModel)]="runNo">
   </mat-form-field>
 
 </div>
 <hr />
+
+<mat-list>
+  <mat-list-item>Run number: {{this.currentRunNo}}</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Start: {{this.startDate}}</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Stop: {{this.stopDate}}</mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>
 
 <mat-table [dataSource]="logs" class="mat-elevation-z8">
   <ng-container matColumnDef="compName">
