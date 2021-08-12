@@ -1,9 +1,9 @@
 import { Component } from "@angular/core";
 
 import { HttpClientService } from "./http-client.service";
-import { logResponse, daqLog } from "./daq.model";
+import { logResponse, daqLog, runLog } from "./daq.model";
 
-interface DAQstate {
+interface DAQButtonState {
   configure: boolean;
   unconfigure: boolean;
   start: boolean;
@@ -15,51 +15,70 @@ interface DAQstate {
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
-  styleUrls: ["./app.component.css"]
+  styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
   daqResponse: logResponse;
   logs: daqLog[];
   displayedColumns: string[] = ["compName", "state", "eventNum", "compStatus"];
 
-  runNo: number = 0;
-  currentRunNo: number = this.runNo;
-  ipAddress: string = "172.18.4.60";
+  // ipAddress: string = "172.18.4.106";
+  ipAddress: string = "172.18.4.105";
+  // ipAddress: string = "172.18.4.104";
+  // ipAddress: string = "172.18.4.132";
 
+  runInfo: runLog;
+  nextRunNo: number;
   startDate: string;
   stopDate: string;
 
   checkFlag: boolean;
   connFlag: boolean;
 
-  daqState: DAQstate;
+  daqButtonState: DAQButtonState;
 
   ResetState() {
-    this.daqState = {
+    this.daqButtonState = {
       configure: false,
       unconfigure: false,
       start: false,
       stop: false,
       pause: false,
-      resume: false
+      resume: false,
     };
   }
 
   constructor(private httpClientService: HttpClientService) {
-    this.daqState = {
+    this.daqButtonState = {
       configure: false,
       unconfigure: false,
       start: false,
       stop: false,
       pause: false,
-      resume: false
+      resume: false,
     };
 
-    this.connFlag = false;
-    this.onGetLog();
+    httpClientService.getAPIInfo().then(res => {
+      this.ipAddress = res["operatorAddress"];
 
-    this.runNo = 0;
-    this.currentRunNo = this.runNo;
+      this.httpClientService.getLastRun().then((res) => {
+        this.parseRunInfo(res);
+      });
+
+      this.connFlag = false;
+      this.onGetLog();
+    });
+
+    this.runInfo = {
+      id: "",
+      runNumber: 0,
+      start: 0,
+      stop: 0,
+      comment: "comment",
+    }
+
+
+
 
     setInterval(() => {
       if (this.checkFlag) {
@@ -68,13 +87,28 @@ export class AppComponent {
     }, 1000);
   }
 
+  parseRunInfo(res: runLog) {
+    this.runInfo = res;
+    this.nextRunNo = res.runNumber + 1;
+    if (res.start != 0) {
+      this.startDate = this.getDateAndTime(new Date(res.start * 1000));
+    } else {
+      this.startDate = "";
+    }
+    if (res.stop != 0) {
+      this.stopDate = this.getDateAndTime(new Date(res.stop * 1000));
+    } else {
+      this.stopDate = "";
+    }
+  }
+
   onGetLog() {
-    this.httpClientService.getLog(this.ipAddress).then(res => {
+    this.httpClientService.getLog(this.ipAddress).then((res) => {
       if (res === undefined) {
         this.connFlag = false;
         this.checkFlag = false;
       } else {
-        console.log(res);
+        // console.log(res);
         this.connFlag = true;
         this.daqResponse = res;
         this.logs = this.daqResponse.returnValue.logs["log"];
@@ -82,28 +116,29 @@ export class AppComponent {
         switch (state) {
           case "LOADED":
             this.ResetState();
-            this.daqState.configure = true;
-            this.checkFlag = false;
+            this.daqButtonState.configure = true;
+            // this.checkFlag = false;
+            this.checkFlag = true;
             break;
 
           case "CONFIGURED":
             this.ResetState();
-            this.daqState.start = true;
-            this.daqState.unconfigure = true;
+            this.daqButtonState.start = true;
+            this.daqButtonState.unconfigure = true;
             this.checkFlag = true;
             break;
 
           case "RUNNING":
             this.ResetState();
-            this.daqState.stop = true;
-            this.daqState.pause = true;
+            this.daqButtonState.stop = true;
+            this.daqButtonState.pause = true;
             this.checkFlag = true;
             break;
 
           case "PAUSED":
             this.ResetState();
-            this.daqState.start = true;
-            this.daqState.resume = true;
+            this.daqButtonState.start = true;
+            this.daqButtonState.resume = true;
             this.checkFlag = true;
             break;
 
@@ -125,21 +160,30 @@ export class AppComponent {
   }
 
   onPostStart() {
-    if (this.daqState.resume) {
+    if (this.daqButtonState.resume) {
       this.onPostResume();
     } else {
-      this.httpClientService.postStart(this.runNo, this.ipAddress);
-      this.currentRunNo = this.runNo;
-      this.runNo++;
-      this.startDate = this.getDateAndTime();
-      this.stopDate = "";
+      this.httpClientService.postStart(this.nextRunNo, this.ipAddress);
+      this.runInfo.runNumber = this.nextRunNo;
+      this.runInfo.start = Math.floor(Date.now() / 1000);
+      this.runInfo.stop = 0;
+      this.runInfo.comment = "";
+
+      this.httpClientService.postStartTime(this.runInfo).then(res => {
+        this.parseRunInfo(res);
+      });
+
+      this.nextRunNo++;
       this.onGetLog();
     }
   }
 
   onPostStop() {
     this.httpClientService.postStop(this.ipAddress);
-    this.stopDate = this.getDateAndTime();
+    this.runInfo.stop = Math.floor(Date.now() / 1000);
+    this.httpClientService.postStopTime(this.runInfo).then(res => {
+      this.parseRunInfo(res);
+    });
     this.onGetLog();
   }
 
@@ -153,8 +197,8 @@ export class AppComponent {
     this.onGetLog();
   }
 
-  getDateAndTime(): string {
-    let time = new Date();
+  getDateAndTime(time = new Date()): string {
+
     let dateAndTime =
       time.getHours() +
       ":" +

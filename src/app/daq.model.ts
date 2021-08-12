@@ -29,3 +29,17 @@ export class logResponse {
   methodName: string;
   returnValue: daqReturnValue;
 }
+
+export class runLog {
+  id: string;
+  runNumber: number;
+  start: number;
+  stop: number;
+  comment: string;
+}
+
+export class apiSettings {
+  operatorAddress: string;
+  apiAddress: string;
+  apiName: string;
+}

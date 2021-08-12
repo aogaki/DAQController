@@ -1,33 +1,62 @@
 <div class="example-button-row">
-  <button mat-raised-button color="primary" (click)="onPostStart()" [disabled]="!daqState.start">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onPostStart()"
+    [disabled]="!daqButtonState.start"
+  >
     <mat-icon>play_arrow</mat-icon> Start
   </button>
-  <button mat-raised-button color="primary" (click)="onPostStop()" [disabled]="!daqState.stop">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onPostStop()"
+    [disabled]="!daqButtonState.stop"
+  >
     <mat-icon>stop</mat-icon> Stop
   </button>
-  <button mat-raised-button color="primary" (click)="onPostPause()" [disabled]="!daqState.pause">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="onPostPause()"
+    [disabled]="!daqButtonState.pause"
+  >
     <mat-icon>pause</mat-icon> Pause
   </button>
-  <button mat-raised-button color="accent" (click)="onPostUnconfig()" [disabled]="!daqState.unconfigure">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="onPostUnconfig()"
+    [disabled]="!daqButtonState.unconfigure"
+  >
     Unconfig
   </button>
-  <button mat-raised-button color="accent" (click)="onPostConfig()" [disabled]="!daqState.configure">
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="onPostConfig()"
+    [disabled]="!daqButtonState.configure"
+  >
     <mat-icon>settings</mat-icon> Config
   </button>
 
   <mat-form-field class="run-number">
-    <input type="number" matInput placeholder="Run number (next)" [(ngModel)]="runNo">
+    <input
+      type="number"
+      matInput
+      placeholder="Next run number"
+      [(ngModel)]="this.nextRunNo"
+    />
   </mat-form-field>
-
 </div>
 <hr />
 
 <mat-list>
-  <mat-list-item>Run number: {{this.currentRunNo}}</mat-list-item>
+  <mat-list-item>Run number: {{ this.runInfo.runNumber }}</mat-list-item>
   <mat-divider></mat-divider>
-  <mat-list-item>Start: {{this.startDate}}</mat-list-item>
+  <mat-list-item>Start: {{ this.startDate }}</mat-list-item>
   <mat-divider></mat-divider>
-  <mat-list-item>Stop: {{this.stopDate}}</mat-list-item>
+  <mat-list-item>Stop: {{ this.stopDate }}</mat-list-item>
   <mat-divider></mat-divider>
 </mat-list>
 
@@ -60,11 +89,17 @@
 
 <mat-card *ngIf="!connFlag">
   <mat-card-header>
-    Can not access to DAQ Controller at <font color="red">{{ ipAddress }}</font>.
+    Can not access to DAQ Controller at <font color="red">{{ ipAddress }}</font
+    >.
   </mat-card-header>
   <mat-card-actions>
     <mat-form-field class="run-number">
-      <input matInput placeholder="IP address" (keyup.enter)="onGetLog()" [(ngModel)]="ipAddress">
+      <input
+        matInput
+        placeholder="IP address"
+        (keyup.enter)="onGetLog()"
+        [(ngModel)]="ipAddress"
+      />
     </mat-form-field>
     <button mat-stroked-button color="warn" (click)="onGetLog()">
       <mat-icon>settings</mat-icon> Change IP
