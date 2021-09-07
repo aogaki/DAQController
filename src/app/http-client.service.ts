@@ -10,6 +10,7 @@ import { stringify } from '@angular/compiler/src/util';
 export class HttpClientService {
   private apiAddress: string = '172.18.4.56:8000';
   private apiName: string = "ELIADETest";
+  private expName: string = "";
 
   constructor(private http: HttpClient, private x2j: NgxXml2jsonService) {
     this.getAPIInfo();
@@ -26,7 +27,9 @@ export class HttpClientService {
 
 
   public getLastRun(): Promise<runLog> {
-    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetLastRun';
+    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetLastRun?expName=' + this.expName;
+
+    console.log(uri);
 
     return this.http
       .get(uri, { responseType: 'json' })
@@ -40,6 +43,7 @@ export class HttpClientService {
   public postStartTime(body: runLog): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStartTime';
 
+    body.expName = this.expName;
     return this.http
       .post(uri, body, { responseType: 'json' })
       .toPromise()
@@ -52,6 +56,7 @@ export class HttpClientService {
   public postStopTime(body: runLog): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStopTime';
 
+    body.expName = this.expName;
     return this.http
       .post(uri, body, { responseType: 'json' })
       .toPromise()
@@ -174,6 +179,7 @@ export class HttpClientService {
       var settings: apiSettings = res as apiSettings;
       this.apiAddress = settings["apiAddress"];
       this.apiName = settings["apiName"];
+      this.expName = settings["expName"];
       console.log(settings);
       return settings;
     }).catch(this.errorHandler);

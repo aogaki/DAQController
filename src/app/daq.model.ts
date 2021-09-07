@@ -35,6 +35,7 @@ export class runLog {
   runNumber: number;
   start: number;
   stop: number;
+  expName: string;
   comment: string;
 }
 
@@ -42,4 +43,5 @@ export class apiSettings {
   operatorAddress: string;
   apiAddress: string;
   apiName: string;
+  expName: string;
 }

@@ -74,6 +74,7 @@ export class AppComponent {
       runNumber: 0,
       start: 0,
       stop: 0,
+      expName: "test",
       comment: "comment",
     }
 

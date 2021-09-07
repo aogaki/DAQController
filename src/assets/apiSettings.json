@@ -1,5 +1,6 @@
 {
-    "operatorAddress": "172.18.4.104",
+    "operatorAddress": "172.18.4.132",
     "apiAddress": "172.18.4.56:8000",
-    "apiName": "ServerTest"
+    "apiName": "ServerTest",
+    "expName": "ES3"
 }
