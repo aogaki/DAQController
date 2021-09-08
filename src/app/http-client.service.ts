@@ -175,7 +175,7 @@ export class HttpClientService {
   }
 
   public getAPIInfo(): Promise<apiSettings> {
-    return this.http.get("/assets/apiSettings.json").toPromise().then(res => {
+    return this.http.get("assets/apiSettings.json").toPromise().then(res => {
       var settings: apiSettings = res as apiSettings;
       this.apiAddress = settings["apiAddress"];
       this.apiName = settings["apiName"];
