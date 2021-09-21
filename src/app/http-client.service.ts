@@ -27,9 +27,9 @@ export class HttpClientService {
 
 
   public getLastRun(): Promise<runLog> {
-    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetLastRun?expName=' + this.expName;
+    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetLastRun/' + this.expName;
 
-    console.log(uri);
+    // console.log(uri);
 
     return this.http
       .get(uri, { responseType: 'json' })
@@ -44,6 +44,7 @@ export class HttpClientService {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStartTime';
 
     body.expName = this.expName;
+    body.dump = false;
     return this.http
       .post(uri, body, { responseType: 'json' })
       .toPromise()
@@ -57,6 +58,21 @@ export class HttpClientService {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStopTime';
 
     body.expName = this.expName;
+    body.dump = false;
+    return this.http
+      .post(uri, body, { responseType: 'json' })
+      .toPromise()
+      .then(res => {
+        return res as runLog;
+      })
+      .catch(this.errorHandler);
+  }
+
+  public postEnableDump(body: runLog): Promise<runLog> {
+    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/EnableDump';
+
+    body.expName = this.expName;
+    body.dump = true;
     return this.http
       .post(uri, body, { responseType: 'json' })
       .toPromise()
@@ -185,7 +201,7 @@ export class HttpClientService {
     }).catch(this.errorHandler);
   }
 
-  private errorHandler(err) {
+  private errorHandler(err: any) {
     console.log('Error occured.', err);
     return Promise.reject(err.message || err);
   }

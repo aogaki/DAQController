@@ -18,8 +18,8 @@ interface DAQButtonState {
   styleUrls: ["./app.component.css"],
 })
 export class AppComponent {
-  daqResponse: logResponse;
-  logs: daqLog[];
+  daqResponse: logResponse = new logResponse;
+  logs: daqLog[] = [];
   displayedColumns: string[] = ["compName", "state", "eventNum", "compStatus"];
 
   // ipAddress: string = "172.18.4.106";
@@ -28,12 +28,12 @@ export class AppComponent {
   // ipAddress: string = "172.18.4.132";
 
   runInfo: runLog;
-  nextRunNo: number;
-  startDate: string;
-  stopDate: string;
+  nextRunNo!: number;
+  startDate!: string;
+  stopDate!: string;
 
-  checkFlag: boolean;
-  connFlag: boolean;
+  checkFlag: boolean = false;
+  connFlag: boolean = false;
 
   daqButtonState: DAQButtonState;
 
@@ -76,6 +76,8 @@ export class AppComponent {
       stop: 0,
       expName: "test",
       comment: "comment",
+      dump: false,
+      dataWriting: true,
     }
 
 
@@ -183,6 +185,13 @@ export class AppComponent {
     this.httpClientService.postStop(this.ipAddress);
     this.runInfo.stop = Math.floor(Date.now() / 1000);
     this.httpClientService.postStopTime(this.runInfo).then(res => {
+      this.parseRunInfo(res);
+    });
+    this.onGetLog();
+  }
+
+  onPostEnableDump() {
+    this.httpClientService.postEnableDump(this.runInfo).then(res => {
       this.parseRunInfo(res);
     });
     this.onGetLog();

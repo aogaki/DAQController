@@ -1,6 +1,6 @@
 {
-    "operatorAddress": "172.18.4.132",
-    "apiAddress": "172.18.4.56:8000",
-    "apiName": "ServerTest",
-    "expName": "ES3"
+    "operatorAddress": "172.18.4.131",
+    "apiAddress": "172.18.4.56:1234",
+    "apiName": "ELIADE",
+    "expName": "ES1"
 }
