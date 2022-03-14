@@ -1,119 +1,96 @@
 <div class="example-button-row">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onPostStart()"
-      [disabled]="!daqButtonState.start"
-    >
-      <mat-icon>play_arrow</mat-icon> Start
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onPostStop()"
-      [disabled]="!daqButtonState.stop"
-    >
-      <mat-icon>stop</mat-icon> Stop
-    </button>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onPostPause()"
-      [disabled]="!daqButtonState.pause"
-    >
-      <mat-icon>pause</mat-icon> Pause
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="onPostUnconfig()"
-      [disabled]="!daqButtonState.unconfigure"
-    >
-      Unconfig
-    </button>
-    <button
-      mat-raised-button
-      color="accent"
-      (click)="onPostConfig()"
-      [disabled]="!daqButtonState.configure"
-    >
-      <mat-icon>settings</mat-icon> Config
-    </button>
-  
+  <button mat-raised-button color="primary" (click)="onPostStart()" [disabled]="!this.daqButtonState.start">
+    <mat-icon>play_arrow</mat-icon> Start
+  </button>
+  <button mat-raised-button color="primary" (click)="onPostStop()" [disabled]="!this.daqButtonState.stop">
+    <mat-icon>stop</mat-icon> Stop
+  </button>
+  <button mat-raised-button color="primary" (click)="onPostPause()" [disabled]="!this.daqButtonState.pause">
+    <mat-icon>pause</mat-icon> Pause
+  </button>
+  <button mat-raised-button color="accent" (click)="onPostUnconfig()" [disabled]="!this.daqButtonState.unconfigure">
+    Unconfig
+  </button>
+  <button mat-raised-button color="accent" (click)="onPostConfig()" [disabled]="!this.daqButtonState.configure">
+    <mat-icon>settings</mat-icon> Config
+  </button>
+
+  <mat-form-field class="run-number">
+    <input type="number" matInput placeholder="Next run number" [disabled]="this.autoIncFlag"
+      [(ngModel)]="this.nextRunNo" />
+  </mat-form-field>
+  <mat-checkbox [(ngModel)]="this.autoIncFlag">Auto increment run nunmber</mat-checkbox>
+</div>
+<hr />
+
+<mat-list>
+  <mat-list-item>Run number: {{ this.runInfo.runNumber }}</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Start: {{ this.startDate }}</mat-list-item>
+  <mat-divider></mat-divider>
+  <mat-list-item>Stop: {{ this.stopDate }}</mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>
+
+<mat-table [dataSource]="logs" class="mat-elevation-z8">
+  <ng-container matColumnDef="compName">
+    <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+    <mat-cell *matCellDef="let component"> {{ component.compName }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="state">
+    <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
+    <mat-cell *matCellDef="let component"> {{ component.state }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="eventNum">
+    <mat-header-cell *matHeaderCellDef> Data size </mat-header-cell>
+    <mat-cell *matCellDef="let component"> {{ component.eventNum }} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="compStatus">
+    <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+    <mat-cell *matCellDef="let component">
+      {{ component.compStatus }}
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+</mat-table>
+
+<mat-card *ngIf="!connFlag">
+  <mat-card-header>
+    Can not access to DAQ Controller at <font color="red">{{ ipAddress }}</font>.
+  </mat-card-header>
+  <mat-card-actions>
     <mat-form-field class="run-number">
-      <input
-        type="number"
-        matInput
-        placeholder="Next run number"
-        [(ngModel)]="this.nextRunNo"
-      />
+      <input matInput placeholder="IP address" (keyup.enter)="onGetLog()" [(ngModel)]="ipAddress" />
     </mat-form-field>
-  </div>
-  <div option-buttons>
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="onPostEnableDump()"
-      [disabled]="!daqButtonState.stop"
-    >
-      <mat-icon>get_app</mat-icon> ASCII dump
+    <button mat-stroked-button color="warn" (click)="onGetLog()">
+      <mat-icon>settings</mat-icon> Change IP
     </button>
-  </div>
-  <hr />
-  
-  <mat-list>
-    <mat-list-item>Run number: {{ this.runInfo.runNumber }}</mat-list-item>
+  </mat-card-actions>
+</mat-card>
+
+<mat-form-field class="comment-field" appearance="fill">
+  <mat-label>Run information</mat-label>
+  <textarea matInput class="runInfo" [(ngModel)]="this.commentData"></textarea>
+</mat-form-field>
+
+<mat-accordion>
+  <mat-expansion-panel *ngFor="let run of runList">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Run {{run.runNumber}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list-item>Run number: {{ run.runNumber }}</mat-list-item>
     <mat-divider></mat-divider>
-    <mat-list-item>Start: {{ this.startDate }}</mat-list-item>
+    <mat-list-item>Start: {{ getDateAndTime(run.start * 1000) }}</mat-list-item>
     <mat-divider></mat-divider>
-    <mat-list-item>Stop: {{ this.stopDate }}</mat-list-item>
+    <mat-list-item>Stop: {{ getDateAndTime(run.stop * 1000) }}</mat-list-item>
     <mat-divider></mat-divider>
-  </mat-list>
-  
-  <mat-table [dataSource]="logs" class="mat-elevation-z8">
-    <ng-container matColumnDef="compName">
-      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let component"> {{ component.compName }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="state">
-      <mat-header-cell *matHeaderCellDef> State </mat-header-cell>
-      <mat-cell *matCellDef="let component"> {{ component.state }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="eventNum">
-      <mat-header-cell *matHeaderCellDef> Data size </mat-header-cell>
-      <mat-cell *matCellDef="let component"> {{ component.eventNum }} </mat-cell>
-    </ng-container>
-  
-    <ng-container matColumnDef="compStatus">
-      <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
-      <mat-cell *matCellDef="let component">
-        {{ component.compStatus }}
-      </mat-cell>
-    </ng-container>
-  
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-  </mat-table>
-  
-  <mat-card *ngIf="!connFlag">
-    <mat-card-header>
-      Can not access to DAQ Controller at <font color="red">{{ ipAddress }}</font
-      >.
-    </mat-card-header>
-    <mat-card-actions>
-      <mat-form-field class="run-number">
-        <input
-          matInput
-          placeholder="IP address"
-          (keyup.enter)="onGetLog()"
-          [(ngModel)]="ipAddress"
-        />
-      </mat-form-field>
-      <button mat-stroked-button color="warn" (click)="onGetLog()">
-        <mat-icon>settings</mat-icon> Change IP
-      </button>
-    </mat-card-actions>
-  </mat-card>
-  
+    <mat-list-item>Run information: {{ run.comment }}</mat-list-item>
+  </mat-expansion-panel>
+</mat-accordion>

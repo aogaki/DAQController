@@ -31,9 +31,13 @@ export class AppComponent {
   nextRunNo!: number;
   startDate!: string;
   stopDate!: string;
+  commentData!: string;
+
+  runList!: runLog[];
 
   checkFlag: boolean = false;
   connFlag: boolean = false;
+  autoIncFlag: boolean = true;
 
   daqButtonState: DAQButtonState;
 
@@ -65,9 +69,15 @@ export class AppComponent {
         this.parseRunInfo(res);
       });
 
+      this.httpClientService.getRunList().then((res) => {
+        this.runList = res;
+        // console.log(this.runList);
+      });
+
       this.connFlag = false;
       this.onGetLog();
     });
+
 
     this.runInfo = {
       id: "",
@@ -80,9 +90,6 @@ export class AppComponent {
       dataWriting: true,
     }
 
-
-
-
     setInterval(() => {
       if (this.checkFlag) {
         this.onGetLog();
@@ -92,26 +99,31 @@ export class AppComponent {
 
   parseRunInfo(res: runLog) {
     this.runInfo = res;
-    this.nextRunNo = res.runNumber + 1;
+    if (this.autoIncFlag) this.nextRunNo = res.runNumber + 1;
     if (res.start != 0) {
-      this.startDate = this.getDateAndTime(new Date(res.start * 1000));
+      this.startDate = this.getDateAndTime(res.start * 1000);
     } else {
       this.startDate = "";
     }
     if (res.stop != 0) {
-      this.stopDate = this.getDateAndTime(new Date(res.stop * 1000));
+      this.stopDate = this.getDateAndTime(res.stop * 1000);
     } else {
       this.stopDate = "";
     }
+    if (this.commentData === undefined || "") this.commentData = this.runInfo.comment;
+    // else if (this.commentData != this.runInfo.comment) this.commentData += this.runInfo.comment;
   }
 
   onGetLog() {
+    this.httpClientService.getLastRun().then((res) => {
+      this.parseRunInfo(res);
+    });
+
     this.httpClientService.getLog(this.ipAddress).then((res) => {
       if (res === undefined) {
         this.connFlag = false;
         this.checkFlag = false;
       } else {
-        // console.log(res);
         this.connFlag = true;
         this.daqResponse = res;
         this.logs = this.daqResponse.returnValue.logs["log"];
@@ -170,7 +182,7 @@ export class AppComponent {
       this.runInfo.runNumber = this.nextRunNo;
       this.runInfo.start = Math.floor(Date.now() / 1000);
       this.runInfo.stop = 0;
-      this.runInfo.comment = "";
+      this.runInfo.comment = this.commentData;
 
       this.httpClientService.postStartTime(this.runInfo).then(res => {
         this.parseRunInfo(res);
@@ -184,8 +196,10 @@ export class AppComponent {
   onPostStop() {
     this.httpClientService.postStop(this.ipAddress);
     this.runInfo.stop = Math.floor(Date.now() / 1000);
+    this.runInfo.comment = this.commentData;
     this.httpClientService.postStopTime(this.runInfo).then(res => {
       this.parseRunInfo(res);
+      this.commentData = "";
     });
     this.onGetLog();
   }
@@ -207,7 +221,10 @@ export class AppComponent {
     this.onGetLog();
   }
 
-  getDateAndTime(time = new Date()): string {
+  getDateAndTime(unixTime: number): string {
+    if (unixTime === 0) return "No information";
+
+    let time = new Date(unixTime);
 
     let dateAndTime =
       time.getHours() +

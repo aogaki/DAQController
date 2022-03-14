@@ -7,7 +7,18 @@
   margin-right: 10px;
 }
 
-.mat-table {
+.mat-table, .mat-expansion-panel {
   background-color: cornsilk;
 }
 
+.comment-field {
+  width: 98%;
+  margin-top: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+  background-color: snow;
+}
+
+.runInfo {
+  height: 200px;
+}

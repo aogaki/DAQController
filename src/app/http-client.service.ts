@@ -26,108 +26,127 @@ export class HttpClientService {
   }
 
 
-  public getLastRun(): Promise<runLog> {
+  public async getLastRun(): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetLastRun/' + this.expName;
 
-    // console.log(uri);
-
-    return this.http
-      .get(uri, { responseType: 'json' })
-      .toPromise()
-      .then(res => {
-        return res as runLog;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .get(uri, { responseType: 'json' })
+        .toPromise();
+      let retVal = res as runLog[];
+      return retVal[0];
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postStartTime(body: runLog): Promise<runLog> {
+  public async getRunList(): Promise<runLog[]> {
+    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/GetRunList/' + this.expName;
+
+    try {
+      const res = await this.http
+        .get(uri, { responseType: 'json' })
+        .toPromise();
+      return res as runLog[];
+    } catch (err) {
+      return this.errorHandler(err);
+    }
+  }
+
+  public async postStartTime(body: runLog): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStartTime';
 
     body.expName = this.expName;
     body.dump = false;
-    return this.http
-      .post(uri, body, { responseType: 'json' })
-      .toPromise()
-      .then(res => {
-        return res as runLog;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'json' })
+        .toPromise();
+      return res as runLog;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postStopTime(body: runLog): Promise<runLog> {
+  public async postStopTime(body: runLog): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStopTime';
 
     body.expName = this.expName;
     body.dump = false;
-    return this.http
-      .post(uri, body, { responseType: 'json' })
-      .toPromise()
-      .then(res => {
-        return res as runLog;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'json' })
+        .toPromise();
+      return res as runLog;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postEnableDump(body: runLog): Promise<runLog> {
+  public async postEnableDump(body: runLog): Promise<runLog> {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/EnableDump';
 
     body.expName = this.expName;
     body.dump = true;
-    return this.http
-      .post(uri, body, { responseType: 'json' })
-      .toPromise()
-      .then(res => {
-        return res as runLog;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'json' })
+        .toPromise();
+      return res as runLog;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public getLog(ipAddress: string): Promise<logResponse> {
+  public async getLog(ipAddress: string): Promise<logResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Log';
 
-    return this.http
-      .get(uri, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as logResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .get(uri, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as logResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postConfigure(ipAddress: string): Promise<daqResponse> {
+  public async postConfigure(ipAddress: string): Promise<daqResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Params';
 
     const body =
       "cmd=<?xml version='1.0' encoding='UTF-8' ?><request><params>config.xml</params></request>";
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postUnconfigure(ipAddress: string): Promise<daqResponse> {
+  public async postUnconfigure(ipAddress: string): Promise<daqResponse> {
     const uri: string =
       'http://' + ipAddress + '/daqmw/scripts/daq.py/ResetParams';
 
     const body = '';
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postStart(runNo: number, ipAddress: string): Promise<daqResponse> {
+  public async postStart(runNo: number, ipAddress: string): Promise<daqResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Begin';
 
     const body =
@@ -135,70 +154,76 @@ export class HttpClientService {
       runNo +
       '</runNo></request>';
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postStop(ipAddress: string): Promise<daqResponse> {
+  public async postStop(ipAddress: string): Promise<daqResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/End';
 
     const body = '';
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postPause(ipAddress: string): Promise<daqResponse> {
+  public async postPause(ipAddress: string): Promise<daqResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Pause';
 
     const body = '';
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public postResume(ipAddress: string): Promise<daqResponse> {
+  public async postResume(ipAddress: string): Promise<daqResponse> {
     const uri: string = 'http://' + ipAddress + '/daqmw/scripts/daq.py/Restart';
 
     const body = '';
 
-    return this.http
-      .post(uri, body, { responseType: 'text' })
-      .toPromise()
-      .then(res => {
-        const jsonDoc = this.GetJSON(res) as daqResponse;
-        return jsonDoc;
-      })
-      .catch(this.errorHandler);
+    try {
+      const res = await this.http
+        .post(uri, body, { responseType: 'text' })
+        .toPromise();
+      const jsonDoc = this.GetJSON(res) as daqResponse;
+      return jsonDoc;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
-  public getAPIInfo(): Promise<apiSettings> {
-    return this.http.get("assets/apiSettings.json").toPromise().then(res => {
+  public async getAPIInfo(): Promise<apiSettings> {
+    try {
+      const res = await this.http.get("assets/apiSettings.json").toPromise();
       var settings: apiSettings = res as apiSettings;
       this.apiAddress = settings["apiAddress"];
       this.apiName = settings["apiName"];
       this.expName = settings["expName"];
-      console.log(settings);
       return settings;
-    }).catch(this.errorHandler);
+    } catch (err) {
+      return this.errorHandler(err);
+    }
   }
 
   private errorHandler(err: any) {

@@ -12,6 +12,7 @@ import { MatListModule } from "@angular/material/list";
 import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
+import { MatExpansionModule } from '@angular/material/expansion'
 import { HttpClientModule } from "@angular/common/http";
 import { FormsModule } from "@angular/forms";
 
@@ -30,6 +31,7 @@ import { FormsModule } from "@angular/forms";
     MatTableModule,
     MatInputModule,
     MatIconModule,
+    MatExpansionModule,
     FormsModule,
     HttpClientModule
   ],
