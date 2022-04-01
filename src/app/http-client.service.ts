@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { NgxXml2jsonService } from 'ngx-xml2json';
-import { logResponse, daqResponse, runLog, apiSettings } from './daq.model';
+import { logResponse, daqResponse, runLog, apiSettings, link, linkList } from './daq.model';
 import { stringify } from '@angular/compiler/src/util';
 
 @Injectable({
@@ -221,6 +221,16 @@ export class HttpClientService {
       this.apiName = settings["apiName"];
       this.expName = settings["expName"];
       return settings;
+    } catch (err) {
+      return this.errorHandler(err);
+    }
+  }
+
+  public async getLinkList(): Promise<link[]> {
+    try {
+      const res = await this.http.get("assets/linkList.json").toPromise();
+      var linkList: linkList = res as linkList;
+      return linkList.URLs;
     } catch (err) {
       return this.errorHandler(err);
     }

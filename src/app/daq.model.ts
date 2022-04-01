@@ -47,3 +47,12 @@ export class apiSettings {
     apiName!: string;
     expName!: string;
 }
+
+export class link {
+    name: string = "";
+    URL: string = "";
+}
+
+export class linkList {
+    URLs!: link[];
+}

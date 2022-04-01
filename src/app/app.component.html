@@ -19,7 +19,14 @@
     <input type="number" matInput placeholder="Next run number" [disabled]="this.autoIncFlag"
       [(ngModel)]="this.nextRunNo" />
   </mat-form-field>
-  <mat-checkbox [(ngModel)]="this.autoIncFlag">Auto increment run nunmber</mat-checkbox>
+  <mat-checkbox [(ngModel)]="this.autoIncFlag">Autoincrement run number</mat-checkbox>
+</div>
+<br>
+<div *ngIf="plotLink" class="link-buttons">
+  <a mat-stroked-button color="link" *ngFor="let link of linkList" href="{{link.URL}}" target="_blank"
+    rel="noopener noreferrer" class="link-each-button">
+    <mat-icon>link</mat-icon>{{link.name}}
+  </a>
 </div>
 <hr />
 

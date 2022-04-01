@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 
 import { HttpClientService } from "./http-client.service";
-import { logResponse, daqLog, runLog } from "./daq.model";
+import { logResponse, daqLog, runLog, link } from "./daq.model";
 
 interface DAQButtonState {
   configure: boolean;
@@ -34,6 +34,9 @@ export class AppComponent {
   commentData!: string;
 
   runList!: runLog[];
+
+  linkList!: link[];
+  plotLink: boolean = false;
 
   checkFlag: boolean = false;
   connFlag: boolean = false;
@@ -71,13 +74,11 @@ export class AppComponent {
 
       this.httpClientService.getRunList().then((res) => {
         this.runList = res;
-        // console.log(this.runList);
       });
 
       this.connFlag = false;
       this.onGetLog();
     });
-
 
     this.runInfo = {
       id: "",
@@ -89,6 +90,13 @@ export class AppComponent {
       dump: false,
       dataWriting: true,
     }
+
+    httpClientService.getLinkList().then(res => {
+      this.linkList = res;
+      if (this.linkList.length > 0) {
+        this.plotLink = true;
+      }
+    })
 
     setInterval(() => {
       if (this.checkFlag) {
@@ -241,4 +249,6 @@ export class AppComponent {
     return dateAndTime;
     // return time.toString();
   }
+
+
 }
