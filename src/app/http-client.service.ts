@@ -57,7 +57,6 @@ export class HttpClientService {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStartTime';
 
     body.expName = this.expName;
-    body.dump = false;
     try {
       const res = await this.http
         .post(uri, body, { responseType: 'json' })
@@ -72,22 +71,6 @@ export class HttpClientService {
     const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/PostStopTime';
 
     body.expName = this.expName;
-    body.dump = false;
-    try {
-      const res = await this.http
-        .post(uri, body, { responseType: 'json' })
-        .toPromise();
-      return res as runLog;
-    } catch (err) {
-      return this.errorHandler(err);
-    }
-  }
-
-  public async postEnableDump(body: runLog): Promise<runLog> {
-    const uri: string = "http://" + this.apiAddress + '/' + this.apiName + '/EnableDump';
-
-    body.expName = this.expName;
-    body.dump = true;
     try {
       const res = await this.http
         .post(uri, body, { responseType: 'json' })

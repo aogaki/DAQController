@@ -31,14 +31,11 @@ export class logResponse {
 }
 
 export class runLog {
-    id!: string;
     runNumber!: number;
     start!: number;
     stop!: number;
     expName!: string;
     comment!: string;
-    dump!: boolean;
-    dataWriting!: boolean;
 }
 
 export class apiSettings {
@@ -46,6 +43,7 @@ export class apiSettings {
     apiAddress!: string;
     apiName!: string;
     expName!: string;
+    computerName!: string;
 }
 
 export class link {

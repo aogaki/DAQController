@@ -1,32 +1,12 @@
 {
     "URLs": [
         {
-            "name": "ELOG digital DAQ",
-            "URL": "http://192.168.146.78:8081/"
-        },
-        {
-            "name": "ELOG analog DAQ",
-            "URL": "https://prisma.nipne.ro:8080/RO22036/"
-        },
-        {
-            "name": "Grafana digital DAQ",
-            "URL": "http://192.168.146.78:3000/d/M-meAFpnk/event-rate?orgId=1&refresh=5s"
-        },
-        {
-            "name": "Grafana analog DAQ",
-            "URL": "http://prisma.nipne.ro:3000/d/h46oEVtnz/rosphere-totals-21lace-4hpge-6si?orgId=1"
-        },
-        {
-            "name": "Grafana HV",
-            "URL": "http://prisma.nipne.ro:3000/d/AvE1EVpnz/rosphere-hv-ln2-21lace-4hpge?orgId=1&refresh=2m"
+            "name": "ELIADE wiki",
+            "URL": "http://git-hub-eli.eli-np.ro/~webac/installed/mediawiki/mediawiki-1.24.2/index.php/TDR-NRF"
         },
         {
             "name": "Monitor",
-            "URL": "http://192.168.146.79:8080/?layout=grid5x5&monitoring=5000&items=[CalibratedSignal/hist04_00,CalibratedSignal/hist04_01,CalibratedSignal/hist04_02,CalibratedSignal/hist04_03,CalibratedSignal/hist04_04,CalibratedSignal/hist00_10,CalibratedSignal/hist00_12,CalibratedSignal/hist01_00,CalibratedSignal/hist01_02,CalibratedSignal/hist01_04,CalibratedSignal/hist04_05,CalibratedSignal/hist04_06,CalibratedSignal/hist04_07,CalibratedSignal/hist04_08,CalibratedSignal/hist04_09,CalibratedSignal/hist02_04,CalibratedSignal/hist02_06,CalibratedSignal/hist02_08,CalibratedSignal/hist02_10,CalibratedSignal/hist03_00,CalibratedSignal/hist03_02,CalibratedSignal/hist03_04,CalibratedSignal/hist03_06,CalibratedSignal/hist03_08,CalibratedSignal/hist03_10]&opts=[logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy]"
-        },
-        {
-            "name": "Monitor AC",
-            "URL": "http://192.168.146.79:8080/?layout=grid5x5&monitoring=5000&items=[CalibratedBGO/hist00_01,CalibratedBGO/hist00_03,CalibratedBGO/hist00_05,CalibratedBGO/hist00_07,CalibratedBGO/hist00_09,CalibratedBGO/hist00_11,CalibratedBGO/hist00_13,CalibratedBGO/hist01_01,CalibratedBGO/hist01_03,CalibratedBGO/hist01_05,CalibratedBGO/hist01_07,CalibratedBGO/hist01_09,CalibratedBGO/hist01_11,CalibratedBGO/hist02_01,CalibratedBGO/hist02_03,CalibratedBGO/hist02_05,CalibratedBGO/hist02_07,CalibratedBGO/hist02_09,CalibratedBGO/hist02_11,CalibratedBGO/hist03_01,CalibratedBGO/hist03_03,CalibratedBGO/hist03_05,CalibratedBGO/hist03_07,CalibratedBGO/hist03_09,CalibratedBGO/hist03_11]&opts=[logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy,logy]"
+            "URL": "http://172.18.4.136:8080/"
         }
     ]
 }

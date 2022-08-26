@@ -22,10 +22,8 @@ export class AppComponent {
   logs: daqLog[] = [];
   displayedColumns: string[] = ["compName", "state", "eventNum", "compStatus"];
 
-  // ipAddress: string = "172.18.4.106";
-  ipAddress: string = "172.18.4.105";
-  // ipAddress: string = "172.18.4.104";
-  // ipAddress: string = "172.18.4.132";
+  ipAddress: string = "172.18.4.56";
+  computerName: string = "ヽ(´ー｀)ノ"
 
   runInfo: runLog;
   nextRunNo!: number;
@@ -38,7 +36,6 @@ export class AppComponent {
   linkList!: link[];
   plotLink: boolean = false;
 
-  checkFlag: boolean = false;
   connFlag: boolean = false;
   autoIncFlag: boolean = true;
 
@@ -65,8 +62,9 @@ export class AppComponent {
       resume: false,
     };
 
-    httpClientService.getAPIInfo().then(res => {
+    this.httpClientService.getAPIInfo().then(res => {
       this.ipAddress = res["operatorAddress"];
+      this.computerName = res["computerName"];
 
       this.httpClientService.getLastRun().then((res) => {
         this.parseRunInfo(res);
@@ -81,14 +79,11 @@ export class AppComponent {
     });
 
     this.runInfo = {
-      id: "",
       runNumber: 0,
       start: 0,
       stop: 0,
       expName: "test",
-      comment: "comment",
-      dump: false,
-      dataWriting: true,
+      comment: "comment"
     }
 
     httpClientService.getLinkList().then(res => {
@@ -99,9 +94,7 @@ export class AppComponent {
     })
 
     setInterval(() => {
-      if (this.checkFlag) {
-        this.onGetLog();
-      }
+      this.onGetLog();
     }, 1000);
   }
 
@@ -126,11 +119,13 @@ export class AppComponent {
     this.httpClientService.getLastRun().then((res) => {
       this.parseRunInfo(res);
     });
+    this.httpClientService.getRunList().then((res) => {
+      this.runList = res;
+    });
 
     this.httpClientService.getLog(this.ipAddress).then((res) => {
       if (res === undefined) {
         this.connFlag = false;
-        this.checkFlag = false;
       } else {
         this.connFlag = true;
         this.daqResponse = res;
@@ -140,29 +135,24 @@ export class AppComponent {
           case "LOADED":
             this.ResetState();
             this.daqButtonState.configure = true;
-            // this.checkFlag = false;
-            this.checkFlag = true;
             break;
 
           case "CONFIGURED":
             this.ResetState();
             this.daqButtonState.start = true;
             this.daqButtonState.unconfigure = true;
-            this.checkFlag = true;
             break;
 
           case "RUNNING":
             this.ResetState();
             this.daqButtonState.stop = true;
             this.daqButtonState.pause = true;
-            this.checkFlag = true;
             break;
 
           case "PAUSED":
             this.ResetState();
             this.daqButtonState.start = true;
             this.daqButtonState.resume = true;
-            this.checkFlag = true;
             break;
 
           default:
@@ -212,13 +202,6 @@ export class AppComponent {
     this.onGetLog();
   }
 
-  onPostEnableDump() {
-    this.httpClientService.postEnableDump(this.runInfo).then(res => {
-      this.parseRunInfo(res);
-    });
-    this.onGetLog();
-  }
-
   onPostPause() {
     this.httpClientService.postPause(this.ipAddress);
     this.onGetLog();
@@ -247,7 +230,6 @@ export class AppComponent {
       "." +
       time.getFullYear();
     return dateAndTime;
-    // return time.toString();
   }
 
 

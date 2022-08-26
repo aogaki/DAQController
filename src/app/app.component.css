@@ -3,13 +3,15 @@
   margin-right: 8px;
 }
 
-.example-button-row, .link-buttons {
+.example-button-row,
+.link-buttons {
   margin-left: 1%;
 }
 
 .link-buttons {
   margin-left: 1%;
 }
+
 .link-each-button {
   margin-right: 0.5%;
 }
@@ -18,8 +20,9 @@
   margin-right: 10px;
 }
 
-.mat-table, .mat-expansion-panel {
-  background-color: cornsilk;
+.mat-table,
+.mat-expansion-panel {
+  background-color: oldlace;
 }
 
 .comment-field {
