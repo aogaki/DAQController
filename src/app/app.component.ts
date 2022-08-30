@@ -115,12 +115,15 @@ export class AppComponent {
     // else if (this.commentData != this.runInfo.comment) this.commentData += this.runInfo.comment;
   }
 
+  onGetRunList() {
+    this.httpClientService.getRunList().then((res) => {
+      this.runList = res;
+    });
+  }
+
   onGetLog() {
     this.httpClientService.getLastRun().then((res) => {
       this.parseRunInfo(res);
-    });
-    this.httpClientService.getRunList().then((res) => {
-      this.runList = res;
     });
 
     this.httpClientService.getLog(this.ipAddress).then((res) => {
@@ -165,11 +168,13 @@ export class AppComponent {
   onPostConfig() {
     this.httpClientService.postConfigure(this.ipAddress);
     this.onGetLog();
+    this.onGetRunList();
   }
 
   onPostUnconfig() {
     this.httpClientService.postUnconfigure(this.ipAddress);
     this.onGetLog();
+    this.onGetRunList();
   }
 
   onPostStart() {
@@ -189,6 +194,7 @@ export class AppComponent {
       this.nextRunNo++;
       this.onGetLog();
     }
+    this.onGetRunList();
   }
 
   onPostStop() {
@@ -200,16 +206,19 @@ export class AppComponent {
       this.commentData = "";
     });
     this.onGetLog();
+    this.onGetRunList();
   }
 
   onPostPause() {
     this.httpClientService.postPause(this.ipAddress);
     this.onGetLog();
+    this.onGetRunList();
   }
 
   onPostResume() {
     this.httpClientService.postResume(this.ipAddress);
     this.onGetLog();
+    this.onGetRunList();
   }
 
   getDateAndTime(unixTime: number): string {
