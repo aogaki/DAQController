@@ -81,6 +81,14 @@
   </mat-card-actions>
 </mat-card>
 
+<mat-form-field class="small-field">
+  <mat-label>Source</mat-label>
+  <textarea matInput [(ngModel)]="this.sourceData"></textarea>
+</mat-form-field>
+<mat-form-field class="small-field">
+  <mat-label>Distance</mat-label>
+  <textarea matInput [(ngModel)]="this.distanceData"></textarea>
+</mat-form-field>
 <mat-form-field class="comment-field" appearance="fill">
   <mat-label>Run information</mat-label>
   <textarea matInput class="runInfo" [(ngModel)]="this.commentData"></textarea>
@@ -98,6 +106,10 @@
     <mat-list-item>Start: {{ getDateAndTime(run.start * 1000) }}</mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>Stop: {{ getDateAndTime(run.stop * 1000) }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>Source: {{ run.source }}</mat-list-item>
+    <mat-divider></mat-divider>
+    <mat-list-item>Distance: {{ run.distance }}</mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item>Run information: {{ run.comment }}</mat-list-item>
   </mat-expansion-panel>

@@ -29,7 +29,10 @@ export class AppComponent {
   nextRunNo!: number;
   startDate!: string;
   stopDate!: string;
+
   commentData!: string;
+  sourceData!: string;
+  distanceData!: string;
 
   runList!: runLog[];
 
@@ -83,7 +86,9 @@ export class AppComponent {
       start: 0,
       stop: 0,
       expName: "test",
-      comment: "comment"
+      comment: "comment",
+      source: "",
+      distance: ""
     }
 
     httpClientService.getLinkList().then(res => {
@@ -111,8 +116,9 @@ export class AppComponent {
     } else {
       this.stopDate = "";
     }
+    if (this.sourceData === undefined || "") this.sourceData = this.runInfo.source;
+    if (this.distanceData === undefined || "") this.distanceData = this.runInfo.distance;
     if (this.commentData === undefined || "") this.commentData = this.runInfo.comment;
-    // else if (this.commentData != this.runInfo.comment) this.commentData += this.runInfo.comment;
   }
 
   onGetRunList() {
@@ -185,6 +191,8 @@ export class AppComponent {
       this.runInfo.runNumber = this.nextRunNo;
       this.runInfo.start = Math.floor(Date.now() / 1000);
       this.runInfo.stop = 0;
+      this.runInfo.source = this.sourceData;
+      this.runInfo.distance = this.distanceData;
       this.runInfo.comment = this.commentData;
 
       this.httpClientService.postStartTime(this.runInfo).then(res => {
@@ -200,10 +208,11 @@ export class AppComponent {
   onPostStop() {
     this.httpClientService.postStop(this.ipAddress);
     this.runInfo.stop = Math.floor(Date.now() / 1000);
+    this.runInfo.source = this.sourceData;
+    this.runInfo.distance = this.distanceData;
     this.runInfo.comment = this.commentData;
     this.httpClientService.postStopTime(this.runInfo).then(res => {
       this.parseRunInfo(res);
-      this.commentData = "";
     });
     this.onGetLog();
     this.onGetRunList();

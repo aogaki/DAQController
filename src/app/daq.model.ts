@@ -36,6 +36,8 @@ export class runLog {
     stop!: number;
     expName!: string;
     comment!: string;
+    source!: string;
+    distance!: string;
 }
 
 export class apiSettings {
