@@ -104,21 +104,38 @@ export class AppComponent {
   }
 
   parseRunInfo(res: runLog) {
-    this.runInfo = res;
-    if (this.autoIncFlag) this.nextRunNo = res.runNumber + 1;
-    if (res.start != 0) {
-      this.startDate = this.getDateAndTime(res.start * 1000);
+    if (res === undefined) {
+      this.runInfo.runNumber = 0;
+      this.runInfo.start = 0;
+      this.runInfo.stop = 0;
+      this.runInfo.comment = "";
+      this.runInfo.distance = "";
+      this.runInfo.source = "";
+
+      this.nextRunNo = 1;
+
+      this.startDate = this.getDateAndTime(0);
+      this.stopDate = this.getDateAndTime(0);
+      this.sourceData = this.runInfo.source;
+      this.distanceData = this.runInfo.distance;
+      this.commentData = this.runInfo.comment;
     } else {
-      this.startDate = "";
+      this.runInfo = res;
+      if (this.autoIncFlag) this.nextRunNo = res.runNumber + 1;
+      if (res.start != 0) {
+        this.startDate = this.getDateAndTime(res.start * 1000);
+      } else {
+        this.startDate = "";
+      }
+      if (res.stop != 0) {
+        this.stopDate = this.getDateAndTime(res.stop * 1000);
+      } else {
+        this.stopDate = "";
+      }
+      if (this.sourceData === undefined || "") this.sourceData = this.runInfo.source;
+      if (this.distanceData === undefined || "") this.distanceData = this.runInfo.distance;
+      if (this.commentData === undefined || "") this.commentData = this.runInfo.comment;
     }
-    if (res.stop != 0) {
-      this.stopDate = this.getDateAndTime(res.stop * 1000);
-    } else {
-      this.stopDate = "";
-    }
-    if (this.sourceData === undefined || "") this.sourceData = this.runInfo.source;
-    if (this.distanceData === undefined || "") this.distanceData = this.runInfo.distance;
-    if (this.commentData === undefined || "") this.commentData = this.runInfo.comment;
   }
 
   onGetRunList() {

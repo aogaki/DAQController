@@ -1,7 +1,7 @@
 {
-    "operatorAddress": "172.18.4.131",
+    "operatorAddress": "172.18.4.178",
     "apiAddress": "172.18.4.56:8080",
     "apiName": "ELIADE",
-    "expName": "Test",
-    "computerName": "ELIADE Server 6"
+    "expName": "ELIADE_Gate",
+    "computerName": "ELIADE Gate"
 }
